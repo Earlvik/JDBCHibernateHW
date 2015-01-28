@@ -100,7 +100,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
 
     @Override
     public void drop() {
-        final String query = "DROP TABLE taxis";
+        final String query = "DROP TABLE IF EXISTS taxis";
         jdbcTemplate.execute(query);
     }
 
