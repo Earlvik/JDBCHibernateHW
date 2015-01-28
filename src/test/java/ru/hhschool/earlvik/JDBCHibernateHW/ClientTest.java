@@ -21,7 +21,7 @@ import static ru.hhschool.earlvik.JDBCHibernateHW.Settings.SettingsUtils.loadSet
 /**
  * Created by Earlviktor on 28.01.2015.
  */
-public class ClientTests {
+public class ClientTest {
 
     private TaxiService taxiService;
     private ClientService clientService;

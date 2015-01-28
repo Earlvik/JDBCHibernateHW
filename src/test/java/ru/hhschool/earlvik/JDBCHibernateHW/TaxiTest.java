@@ -18,7 +18,7 @@ import static ru.hhschool.earlvik.JDBCHibernateHW.Settings.SettingsUtils.loadSet
  * Created by Earlviktor on 28.01.2015.
  */
 
-public class TaxiTests {
+public class TaxiTest {
 
     private MysqlDataSource mysqlDataSource;
     private Settings settings;
@@ -86,7 +86,7 @@ public class TaxiTests {
 
         Set<Taxi> taxis = taxiService.getAll();
         Assert.assertNotNull("The returned set of results was null",taxis);
-        Assert.assertTrue("The size of set was not 2, but "+taxis.size(),taxis.size() == 2);
+        Assert.assertTrue("The size of set was not 2, but " + taxis.size(), taxis.size() == 2);
         Assert.assertTrue("No Bob returned, only "+taxis,taxis.stream().anyMatch(x -> x.equals(bob)));
         Assert.assertTrue("No Steve returned, only "+taxis,taxis.stream().anyMatch(x -> x.equals(steve)));
     }
