@@ -27,7 +27,9 @@ public class Client {
     @Column(name = "creation_time", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
-
+    /**
+     * Id of taxi called for this client
+     */
     @Column(name = "car_id")
     private Integer carId;
 

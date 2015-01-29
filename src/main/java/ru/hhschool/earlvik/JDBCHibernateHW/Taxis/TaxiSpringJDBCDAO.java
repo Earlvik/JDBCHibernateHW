@@ -42,6 +42,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
         params.put("driver_name", taxi.getDriverName());
         params.put("car", taxi.getCar());
         params.put("available", taxi.isAvailable());
+        params.put("drives", taxi.getDrives());
 
 
         final int taxiId = simpleJdbcInsert.executeAndReturnKey(params).intValue();
@@ -51,7 +52,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
 
     @Override
     public Optional<Taxi> get(TaxiId taxiId) {
-        final String query = "SELECT taxi_id, driver_name, car, available FROM taxis WHERE taxi_id = :taxi_id";
+        final String query = "SELECT taxi_id, driver_name, car, available, drives FROM taxis WHERE taxi_id = :taxi_id";
 
         final ImmutableMap<String, Object> params = ImmutableMap.of("taxi_id", taxiId.getValue());
 
@@ -66,7 +67,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
 
     @Override
     public Set<Taxi> getAll() {
-        final String query = "SELECT taxi_id, driver_name, car, available FROM taxis";
+        final String query = "SELECT taxi_id, driver_name, car, available, drives FROM taxis";
 
         return ImmutableSet.copyOf(jdbcTemplate.query(query, rowToTaxi));
     }
@@ -77,13 +78,16 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
             throw new IllegalArgumentException("can not update " + taxi + " without id");
         }
 
-        final String query = "UPDATE taxis SET driver_name = :driver_name, car = :car, available = :available WHERE taxi_id = :taxi_id";
+        final String query = "UPDATE taxis SET" +
+                " driver_name = :driver_name, car = :car," +
+                " available = :available, drives = :drives WHERE taxi_id = :taxi_id";
 
         final ImmutableMap<String, Object> params = ImmutableMap.of(
                 "taxi_id",taxi.getId().getValue(),
                 "driver_name",taxi.getDriverName(),
                 "car", taxi.getCar(),
-                "available", taxi.isAvailable()
+                "available", taxi.isAvailable(),
+                "drives", taxi.getDrives()
         );
 
         namedParameterJdbcTemplate.update(query, params);
@@ -111,6 +115,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
                 "  driver_name varchar(20) DEFAULT NULL,\n" +
                 "  car varchar(20) DEFAULT NULL,\n" +
                 "  available bool DEFAULT false,\n" +
+                "  drives int(10) unsigned NOT NULL DEFAULT 0,\n"+
                 "  PRIMARY KEY (taxi_id)\n" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
 
@@ -122,6 +127,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
                     new TaxiId(resultSet.getInt("taxi_id")),
                     resultSet.getString("driver_name"),
                     resultSet.getString("car"),
-                    resultSet.getBoolean("available")
+                    resultSet.getBoolean("available"),
+                    resultSet.getInt("drives")
             );
 }

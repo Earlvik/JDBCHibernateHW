@@ -8,6 +8,7 @@ import org.junit.Test;
 import ru.hhschool.earlvik.JDBCHibernateHW.Clients.*;
 import ru.hhschool.earlvik.JDBCHibernateHW.Settings.Settings;
 import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.Taxi;
+import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiDAO;
 import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiService;
 import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiSpringJDBCDAO;
 
@@ -40,7 +41,10 @@ public class ClientTest {
         final SessionFactory sessionFactory = getSessionFactory();
         final Settings settings = loadSettings();
         final MysqlDataSource mysqlDataSource = mysqlDataSource(settings.database.url, settings.database.user, settings.database.password);
-        taxiService = new TaxiService(new TaxiSpringJDBCDAO(mysqlDataSource));
+        TaxiDAO taxiDAO = new TaxiSpringJDBCDAO(mysqlDataSource);
+        taxiDAO.drop();
+        taxiDAO.create();
+        taxiService = new TaxiService(taxiDAO);
         clientService = getClientService(sessionFactory);
     }
 

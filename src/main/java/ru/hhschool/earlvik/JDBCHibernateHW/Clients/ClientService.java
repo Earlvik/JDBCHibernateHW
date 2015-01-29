@@ -52,6 +52,7 @@ public class ClientService {
             if(!taxi.isAvailable()) return;
             Optional<Client> clientOptional = clientDAO.get(clientId);
             if(!clientOptional.isPresent()) return;
+            taxi.setDrives(taxi.getDrives()+1);
             Client client = clientOptional.get();
             taxi.setAvailable(false);
             taxiService.update(taxi);

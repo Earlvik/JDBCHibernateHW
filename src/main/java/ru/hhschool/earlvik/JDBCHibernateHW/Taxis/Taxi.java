@@ -4,31 +4,44 @@ package ru.hhschool.earlvik.JDBCHibernateHW.Taxis;
  * Created by Earlviktor on 21.01.2015.
  */
 public class Taxi {
-
+    /**
+     * Unique taxi number
+     */
     private TaxiId id;
-
+    /**
+     * Name of taxi driver
+     */
     private String driverName;
-
+    /**
+     * Car name
+     */
     private String car;
-
+    /**
+     * Is taxi available for calling
+     */
     private boolean available;
+    /**
+     * Number of drives by this taxi
+     */
+    private int drives;
 
 
 
     public static Taxi create(final String driverName, final String car, final boolean available) {
-        return new Taxi(null, driverName,car,available);
+        return new Taxi(null, driverName,car,available, 0);
     }
 
 
-    static Taxi existing(final TaxiId id, final String driverName, final String car, final boolean available) {
-        return new Taxi(id, driverName, car, available);
+    static Taxi existing(final TaxiId id, final String driverName, final String car, final boolean available, int drives) {
+        return new Taxi(id, driverName, car, available, drives);
     }
 
-    private Taxi(TaxiId id, String driverName, String car, boolean available) {
+    private Taxi(TaxiId id, String driverName, String car, boolean available, int drives) {
         this.id = id;
         this.driverName = driverName;
         this.car = car;
         this.available = available;
+        this.drives = drives;
     }
 
     public void setId(TaxiId id) {
@@ -63,6 +76,14 @@ public class Taxi {
         this.available = available;
     }
 
+    public int getDrives() {
+        return drives;
+    }
+
+    public void setDrives(int drives) {
+        this.drives = drives;
+    }
+
     @Override
     public boolean equals(final Object that){
         if (this == that) return true;
@@ -87,8 +108,8 @@ public class Taxi {
     @Override
     public String toString() {
         return String.format(
-                "%s{id=%d, driver='%s', car='%s', available='%s'}",
-                getClass().getSimpleName(), (id==null)?null:id.getValue(), driverName, car, available
+                "%s{id=%d, driver='%s', car='%s', available='%s', drives='%s}",
+                getClass().getSimpleName(), (id==null)?null:id.getValue(), driverName, car, available, drives
         );
     }
 }
