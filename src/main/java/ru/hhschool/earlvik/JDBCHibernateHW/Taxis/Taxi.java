@@ -1,7 +1,7 @@
 package ru.hhschool.earlvik.JDBCHibernateHW.Taxis;
 
 /**
- * Created by Earlviktor on 21.01.2015.
+ *  on 21.01.2015.
  */
 public class Taxi {
     /**
@@ -26,9 +26,8 @@ public class Taxi {
     private int drives;
 
 
-
     public static Taxi create(final String driverName, final String car, final boolean available) {
-        return new Taxi(null, driverName,car,available, 0);
+        return new Taxi(null, driverName, car, available, 0);
     }
 
 
@@ -85,7 +84,7 @@ public class Taxi {
     }
 
     @Override
-    public boolean equals(final Object that){
+    public boolean equals(final Object that) {
         if (this == that) return true;
         if (that == null || getClass() != that.getClass()) return false;
 
@@ -93,7 +92,7 @@ public class Taxi {
         if (driverName != null ? !driverName.equals(thatTaxi.driverName) : thatTaxi.driverName != null) return false;
         if (id != null ? !(id.getValue() == thatTaxi.id.getValue()) : thatTaxi.id != null) return false;
         if (car != null ? !car.equals(thatTaxi.car) : thatTaxi.car != null) return false;
-        if(available != ((Taxi) that).available) return false;
+        if (available != ((Taxi) that).available) return false;
         return true;
     }
 
@@ -109,7 +108,7 @@ public class Taxi {
     public String toString() {
         return String.format(
                 "%s{id=%d, driver='%s', car='%s', available='%s', drives='%s}",
-                getClass().getSimpleName(), (id==null)?null:id.getValue(), driverName, car, available, drives
+                getClass().getSimpleName(), (id == null) ? null : id.getValue(), driverName, car, available, drives
         );
     }
 }

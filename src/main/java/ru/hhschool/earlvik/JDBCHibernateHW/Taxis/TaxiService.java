@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Created by Earlviktor on 28.01.2015.
+ *
  */
 public class TaxiService {
 
@@ -14,23 +14,23 @@ public class TaxiService {
         this.taxiDAO = taxiDAO;
     }
 
-    public void insert(final Taxi taxi){
+    public void insert(final Taxi taxi) {
         taxiDAO.insert(taxi);
     }
 
-    public Optional<Taxi> get(final TaxiId taxiId){
-           return taxiDAO.get(taxiId);
+    public Optional<Taxi> get(final TaxiId taxiId) {
+        return taxiDAO.get(taxiId);
     }
 
-    public Set<Taxi> getAll(){
+    public Set<Taxi> getAll() {
         return taxiDAO.getAll();
     }
 
-    public void update(Taxi taxi){
+    public void update(Taxi taxi) {
         taxiDAO.update(taxi);
     }
 
-    public void delete(TaxiId taxiId){
+    public void delete(TaxiId taxiId) {
         taxiDAO.delete(taxiId);
     }
 

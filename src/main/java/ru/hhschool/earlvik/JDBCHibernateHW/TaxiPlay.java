@@ -13,7 +13,7 @@ import static ru.hhschool.earlvik.JDBCHibernateHW.Settings.SettingsUtils.loadSet
 import static ru.hhschool.earlvik.JDBCHibernateHW.Settings.DataSourceUtils.mysqlDataSource;
 
 /**
- * Created by Earlviktor on 21.01.2015.
+ *  on 21.01.2015.
  */
 public class TaxiPlay {
 
@@ -30,7 +30,7 @@ public class TaxiPlay {
 
         System.out.println("users in db: " + taxiDAO.getAll());
 
-        final Taxi taxi = Taxi.create("Gordon", "Mini Cooper",true);
+        final Taxi taxi = Taxi.create("Gordon", "Mini Cooper", true);
         taxiDAO.insert(taxi);
         System.out.println("persisted " + taxi);
         System.out.println("users in db: " + taxiDAO.getAll());
@@ -41,7 +41,6 @@ public class TaxiPlay {
         System.out.println("updated Gordon to Morgan");
         System.out.println("users in db: " + taxiDAO.getAll());
         System.out.println();
-
 
 
         taxiDAO.delete(taxi.getId());

@@ -9,26 +9,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * Created by Earlviktor on 21.01.2015.
- */
 public class ClientHibernateDAO implements ClientDAO {
-    
+
     private final SessionFactory sessionFactory;
-    
-    public ClientHibernateDAO(final SessionFactory sessionFactory){
+
+    public ClientHibernateDAO(final SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     private Session session() {
         return sessionFactory.getCurrentSession();
     }
-    
+
     @Override
     public void insert(Client client) {
-          if(client.getId() != null){
-              throw new IllegalArgumentException("can not insert "+client+" with assigned id");
-          }
+        if (client.getId() != null) {
+            throw new IllegalArgumentException("can not insert " + client + " with assigned id");
+        }
         session().save(client);
     }
 
@@ -47,14 +44,14 @@ public class ClientHibernateDAO implements ClientDAO {
 
     @Override
     public void update(Client client) {
-           session().update(client);
+        session().update(client);
     }
 
     @Override
     public void delete(ClientId clientId) {
-          session().createQuery("DELETE Client WHERE client_id = :id")
-                  .setInteger("id",clientId.getValue())
-                  .executeUpdate();
+        session().createQuery("DELETE Client WHERE client_id = :id")
+                .setInteger("id", clientId.getValue())
+                .executeUpdate();
 
     }
 }

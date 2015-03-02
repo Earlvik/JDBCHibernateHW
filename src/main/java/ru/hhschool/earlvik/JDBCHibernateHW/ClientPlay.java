@@ -14,7 +14,7 @@ import static ru.hhschool.earlvik.JDBCHibernateHW.Settings.DataSourceUtils.mysql
 import static ru.hhschool.earlvik.JDBCHibernateHW.Settings.SettingsUtils.loadSettings;
 
 /**
- * Created by Earlviktor on 21.01.2015.
+ *  on 21.01.2015.
  */
 public class ClientPlay {
 
@@ -28,7 +28,7 @@ public class ClientPlay {
 
             final ClientService clientService = getClientService(sessionFactory);
 
-            final Client client = new Client("Head", "Hunterz",null);
+            final Client client = new Client("Head", "Hunterz");
             System.out.println("persisting " + client);
             clientService.insert(client);
             System.out.println("clients in db: " + clientService.getAll());
@@ -40,27 +40,27 @@ public class ClientPlay {
             System.out.println("users in db: " + clientService.getAll());
             System.out.println();
 
-            final Taxi taxiAvailible = Taxi.create("Gordon", "Mini Cooper",true);
-            final Taxi taxiNotAvailible = Taxi.create("Jimbo","Pontiac",false);
+            final Taxi taxiAvailible = Taxi.create("Gordon", "Mini Cooper", true);
+            final Taxi taxiNotAvailible = Taxi.create("Jimbo", "Pontiac", false);
             taxiService.insert(taxiAvailible);
             taxiService.insert(taxiNotAvailible);
 
             System.out.println("users in taxi db: " + taxiService.getAll());
             System.out.println();
 
-            clientService.callTaxi(taxiService,new ClientId(client.getId()),taxiAvailible.getId());
-            System.out.println("Called available taxi, now have these clients: " +clientService.getAll());
-            System.out.println(" And these taxis: "+taxiService.getAll());
+            clientService.callTaxi(taxiService, client.getId(), taxiAvailible.getId());
+            System.out.println("Called available taxi, now have these clients: " + clientService.getAll());
+            System.out.println(" And these taxis: " + taxiService.getAll());
             System.out.println();
 
-            clientService.callTaxi(taxiService, new ClientId(client.getId()),taxiNotAvailible.getId());
-            System.out.println("Called not available taxi, now have this clients: " +clientService.getAll());
-            System.out.println(" And these taxis: "+taxiService.getAll());
+            clientService.callTaxi(taxiService, client.getId(), taxiNotAvailible.getId());
+            System.out.println("Called not available taxi, now have this clients: " + clientService.getAll());
+            System.out.println(" And these taxis: " + taxiService.getAll());
             System.out.println();
 
 
             System.out.println("deleting " + client);
-            clientService.delete(new ClientId(client.getId()));
+            clientService.delete(client.getId());
             System.out.println("users in db: " + clientService.getAll());
 
         } finally {
@@ -70,7 +70,7 @@ public class ClientPlay {
 
     private static ClientService getClientService(SessionFactory sessionFactory) {
         final ClientDAO clientDAO = new ClientHibernateDAO(sessionFactory);
-        return new ClientService(sessionFactory,clientDAO);
+        return new ClientService(sessionFactory, clientDAO);
     }
 
     private static SessionFactory getSessionFactory() {

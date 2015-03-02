@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Created by Earlviktor on 21.01.2015.
+ *  on 21.01.2015.
  */
 public interface TaxiDAO {
 
@@ -18,7 +18,4 @@ public interface TaxiDAO {
 
     void delete(TaxiId taxiId);
 
-    void drop();
-
-    void create();
 }

@@ -15,13 +15,13 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Created by Earlviktor on 21.01.2015.
+ *  on 21.01.2015.
  */
 public class TaxiSpringJDBCDAO implements TaxiDAO {
 
-    private final JdbcTemplate jdbcTemplate;
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private final SimpleJdbcInsert simpleJdbcInsert;
+    protected final JdbcTemplate jdbcTemplate;
+    protected final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    protected final SimpleJdbcInsert simpleJdbcInsert;
 
     public TaxiSpringJDBCDAO(final DataSource dataSource) {
 
@@ -38,7 +38,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
             throw new IllegalArgumentException("can not insert " + taxi + " with already assigned id");
         }
 
-        final Map<String, Object> params = new HashMap<String,Object>();
+        final Map<String, Object> params = new HashMap<String, Object>();
         params.put("driver_name", taxi.getDriverName());
         params.put("car", taxi.getCar());
         params.put("available", taxi.isAvailable());
@@ -83,8 +83,8 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
                 " available = :available, drives = :drives WHERE taxi_id = :taxi_id";
 
         final ImmutableMap<String, Object> params = ImmutableMap.of(
-                "taxi_id",taxi.getId().getValue(),
-                "driver_name",taxi.getDriverName(),
+                "taxi_id", taxi.getId().getValue(),
+                "driver_name", taxi.getDriverName(),
                 "car", taxi.getCar(),
                 "available", taxi.isAvailable(),
                 "drives", taxi.getDrives()
@@ -102,25 +102,6 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
         namedParameterJdbcTemplate.update(query, params);
     }
 
-    @Override
-    public void drop() {
-        final String query = "DROP TABLE IF EXISTS taxis";
-        jdbcTemplate.execute(query);
-    }
-
-    @Override
-    public void create(){
-        final String query ="CREATE TABLE taxis (\n" +
-                "  taxi_id int(10) unsigned NOT NULL AUTO_INCREMENT,\n" +
-                "  driver_name varchar(20) DEFAULT NULL,\n" +
-                "  car varchar(20) DEFAULT NULL,\n" +
-                "  available bool DEFAULT false,\n" +
-                "  drives int(10) unsigned NOT NULL DEFAULT 0,\n"+
-                "  PRIMARY KEY (taxi_id)\n" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
-
-        jdbcTemplate.execute(query);
-    }
 
     private static final RowMapper<Taxi> rowToTaxi = (resultSet, rowNum) ->
             Taxi.existing(

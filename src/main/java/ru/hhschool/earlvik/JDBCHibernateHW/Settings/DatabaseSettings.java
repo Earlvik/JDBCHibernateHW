@@ -3,7 +3,7 @@ package ru.hhschool.earlvik.JDBCHibernateHW.Settings;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Created by Earlviktor on 21.01.2015.
+ *  on 21.01.2015.
  */
 public class DatabaseSettings {
     public final String url;

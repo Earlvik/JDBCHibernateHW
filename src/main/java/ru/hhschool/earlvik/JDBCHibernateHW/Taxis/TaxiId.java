@@ -1,7 +1,7 @@
 package ru.hhschool.earlvik.JDBCHibernateHW.Taxis;
 
 /**
- * Created by Earlviktor on 21.01.2015.
+ *  on 21.01.2015.
  */
 public class TaxiId {
 

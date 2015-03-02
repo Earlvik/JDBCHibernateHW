@@ -5,17 +5,13 @@ import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiId;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by Earlviktor on 21.01.2015.
- */
-
 @Entity
 @Table(name = "clients")
 public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="client_id")
+    @Column(name = "client_id")
     private Integer id;
 
     @Column(name = "first_name")
@@ -34,17 +30,28 @@ public class Client {
     private Integer carId;
 
 
-
-
     public Client(final String firstName, final String lastName, TaxiId carId) {
+        if(firstName == null || lastName == null || carId == null)
+            throw new IllegalArgumentException("Null constructor arguments make no sense");
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.creationDate = new Date();
-        this.carId = (carId == null)?null:carId.getValue();
+        this.carId = carId.getValue();
+    }
+
+    public Client(final String firstName, final String lastName){
+        if(firstName == null || lastName == null)
+            throw new IllegalArgumentException("Null constructor arguments make no sense");
+
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.creationDate = new Date();
     }
 
     @Deprecated
-    Client() {}
+    Client() {
+    }
 
     public Integer getCarId() {
         return carId;
@@ -70,8 +77,8 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public Integer getId() {
-        return id;
+    public ClientId getId() {
+        return new ClientId(id);
     }
 
     public Date getCreationDate() {
@@ -103,6 +110,6 @@ public class Client {
     @Override
     public String toString() {
         return String.format("%s{id=%d, firstName='%s', lastName='%s', creationDate='%s', requested car id='%s}",
-                getClass().getSimpleName(), id, firstName, lastName, creationDate,carId);
+                getClass().getSimpleName(), id, firstName, lastName, creationDate, carId);
     }
 }

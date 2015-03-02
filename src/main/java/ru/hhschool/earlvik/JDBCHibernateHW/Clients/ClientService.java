@@ -12,27 +12,24 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
-/**
- * Created by Earlviktor on 21.01.2015.
- */
 public class ClientService {
-        private final SessionFactory sessionFactory;
-        private final ClientDAO clientDAO;
-    
-        public ClientService(final SessionFactory sessionFactory, final ClientDAO clientDAO){
-            this.sessionFactory = sessionFactory;
-            this.clientDAO = clientDAO;
-        }
-    
-    public void insert(final Client client){
+    private final SessionFactory sessionFactory;
+    private final ClientDAO clientDAO;
+
+    public ClientService(final SessionFactory sessionFactory, final ClientDAO clientDAO) {
+        this.sessionFactory = sessionFactory;
+        this.clientDAO = clientDAO;
+    }
+
+    public void insert(final Client client) {
         inTransaction(() -> clientDAO.insert(client));
     }
 
-    public Optional<Client> get(final ClientId clientId){
-        return inTransaction(()->clientDAO.get(clientId));
+    public Optional<Client> get(final ClientId clientId) {
+        return inTransaction(() -> clientDAO.get(clientId));
     }
 
-    public Set<Client> getAll(){
+    public Set<Client> getAll() {
         return inTransaction(clientDAO::getAll);
     }
 
@@ -44,15 +41,19 @@ public class ClientService {
         inTransaction(() -> clientDAO.delete(clientId));
     }
 
-    public void callTaxi(final TaxiService taxiService, final ClientId clientId, final TaxiId taxiId){
-        inTransaction(() ->{
+    //TODO: rollback transactions in taxi
+    public void callTaxi(final TaxiService taxiService, final ClientId clientId, final TaxiId taxiId) {
+        inTransaction(() -> {
             Optional<Taxi> taxiOptional = taxiService.get(taxiId);
-            if(!taxiOptional.isPresent()) return;
+            if (!taxiOptional.isPresent())
+                throw new IllegalArgumentException("No taxi with id "+taxiId.getValue()+" was found");
             Taxi taxi = taxiOptional.get();
-            if(!taxi.isAvailable()) return;
+            if (!taxi.isAvailable())
+                throw new IllegalArgumentException("Taxi with id "+taxiId.getValue()+" was not available");
             Optional<Client> clientOptional = clientDAO.get(clientId);
-            if(!clientOptional.isPresent()) return;
-            taxi.setDrives(taxi.getDrives()+1);
+            if (!clientOptional.isPresent())
+                throw new IllegalArgumentException("No client with id "+clientId.getValue()+"was found");
+            taxi.setDrives(taxi.getDrives() + 1);
             Client client = clientOptional.get();
             taxi.setAvailable(false);
             taxiService.update(taxi);
@@ -61,19 +62,19 @@ public class ClientService {
     }
 
     private void inTransaction(final Runnable runnable) {
-        inTransaction(()->{
+        inTransaction(() -> {
             runnable.run();
             return null;
         });
     }
 
-    private <T> T inTransaction(final Supplier<T> supplier){
+    private <T> T inTransaction(final Supplier<T> supplier) {
         final Optional<Transaction> transaction = beginTransaction();
-        try{
+        try {
             final T result = supplier.get();
             transaction.ifPresent(Transaction::commit);
             return result;
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             transaction.ifPresent(Transaction::rollback);
             throw e;
         }
@@ -81,7 +82,7 @@ public class ClientService {
 
     private Optional<Transaction> beginTransaction() {
         final Transaction transaction = sessionFactory.getCurrentSession().getTransaction();
-        if(!transaction.isActive()){
+        if (!transaction.isActive()) {
             transaction.begin();
             return Optional.of(transaction);
         }

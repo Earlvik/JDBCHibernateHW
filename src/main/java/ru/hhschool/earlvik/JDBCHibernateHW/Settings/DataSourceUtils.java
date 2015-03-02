@@ -5,7 +5,7 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import java.sql.SQLException;
 
 /**
- * Created by Earlviktor on 21.01.2015.
+ *  on 21.01.2015.
  */
 public class DataSourceUtils {
     private DataSourceUtils() {

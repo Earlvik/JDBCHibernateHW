@@ -1,8 +1,5 @@
 package ru.hhschool.earlvik.JDBCHibernateHW.Clients;
 
-/**
- * Created by Earlviktor on 21.01.2015.
- */
 public class ClientId {
     private int value;
 
@@ -16,5 +13,19 @@ public class ClientId {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object that){
+        if (this == that) return true;
+        if (that == null || getClass() != that.getClass()) return false;
+
+        ClientId thatClientId = (ClientId)that;
+        return this.value == thatClientId.value;
+    }
+
+    @Override
+    public int hashCode(){
+        return value;
     }
 }
