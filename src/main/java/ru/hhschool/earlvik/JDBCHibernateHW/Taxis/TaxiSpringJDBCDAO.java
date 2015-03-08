@@ -2,6 +2,7 @@ package ru.hhschool.earlvik.JDBCHibernateHW.Taxis;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,6 +24,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
     protected final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     protected final SimpleJdbcInsert simpleJdbcInsert;
 
+    @Inject
     public TaxiSpringJDBCDAO(final DataSource dataSource) {
 
         this.jdbcTemplate = new JdbcTemplate(dataSource);

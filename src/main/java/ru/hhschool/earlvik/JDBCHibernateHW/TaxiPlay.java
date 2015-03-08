@@ -1,9 +1,12 @@
 package ru.hhschool.earlvik.JDBCHibernateHW;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import ru.hhschool.earlvik.JDBCHibernateHW.Settings.Settings;
 import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.Taxi;
 import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiDAO;
+import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiModule;
 import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiSpringJDBCDAO;
 
 import java.sql.SQLException;
@@ -18,12 +21,10 @@ import static ru.hhschool.earlvik.JDBCHibernateHW.Settings.DataSourceUtils.mysql
 public class TaxiPlay {
 
     public static void main(String[] args) throws SQLException {
-        final Settings settings = loadSettings();
+        final Injector injector = Guice.createInjector(new TaxiModule());
 
-        final MysqlDataSource mysqlDataSource = mysqlDataSource(settings.database.url, settings.database.user, settings.database.password);
-
-        System.out.println("Spring JDBC example");
-        play(new TaxiSpringJDBCDAO(mysqlDataSource));
+        TaxiDAO taxiDAO = injector.getInstance(TaxiDAO.class);
+        play(taxiDAO);
     }
 
     private static void play(TaxiDAO taxiDAO) {

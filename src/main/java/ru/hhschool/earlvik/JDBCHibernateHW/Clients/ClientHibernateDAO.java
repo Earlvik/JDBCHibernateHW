@@ -1,6 +1,7 @@
 package ru.hhschool.earlvik.JDBCHibernateHW.Clients;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.inject.Inject;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,6 +14,7 @@ public class ClientHibernateDAO implements ClientDAO {
 
     private final SessionFactory sessionFactory;
 
+    @Inject
     public ClientHibernateDAO(final SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
