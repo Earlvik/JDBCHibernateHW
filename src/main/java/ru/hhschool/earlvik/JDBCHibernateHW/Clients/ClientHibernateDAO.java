@@ -17,11 +17,10 @@ public class ClientHibernateDAO implements ClientDAO {
 
     protected Logger logger = LoggerFactory.getLogger(ClientDAO.class);
 
-    @Inject
-    @Named("Client")
+
     private final SessionFactory sessionFactory;
 
-
+    @Inject
     public ClientHibernateDAO(final SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

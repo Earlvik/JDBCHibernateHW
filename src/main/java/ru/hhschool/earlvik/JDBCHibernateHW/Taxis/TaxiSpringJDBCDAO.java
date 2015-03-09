@@ -28,14 +28,10 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
     protected final SimpleJdbcInsert simpleJdbcInsert;
     protected Logger logger = LoggerFactory.getLogger(TaxiDAO.class);
 
+
+
     @Inject
-    @Named("Taxi")
-    DataSource dataSource;
-
-
-    public TaxiSpringJDBCDAO(final DataSource dataSource) {
-
-        this.dataSource = dataSource;
+    public TaxiSpringJDBCDAO(@Named("Taxi") final DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
         this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)

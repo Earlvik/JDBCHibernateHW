@@ -6,6 +6,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import ru.hhschool.earlvik.JDBCHibernateHW.HibernateConfig;
 
 public class ClientTestModule extends AbstractModule{
     @Override
@@ -16,16 +17,14 @@ public class ClientTestModule extends AbstractModule{
     @Provides
     @Singleton
     SessionFactory provideSessionFactory(){
-        Configuration configuration = new Configuration();
-        configuration.addAnnotatedClass(Client.class);
-        configuration.setProperty("hibernate.dialect",
-                "org.hibernate.dialect.H2Dialect");
-        configuration.setProperty("hibernate.connection.driver_class",
-                "org.h2.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:h2:mem");
-        configuration.setProperty("hibernate.hbm2ddl.auto", "create");
-
-        return configuration.buildSessionFactory();
+        return HibernateConfig.prod()
+                /*.setProperty("hibernate.connection.driver_class", "org.h2.Driver")
+                .setProperty("hibernate.connection.url", "jdbc:h2:mem:test;INIT=CREATE SCHEMA IF NOT EXISTS homework")
+                .setProperty("hibernate.connection.username","sa")
+                .setProperty("hibernate.connection.password", "")
+                .setProperty("hibernate.show_sql","true")
+                .setProperty("hibernate.hbm2ddl.auto","create-drop")*/
+                .buildSessionFactory();
 
     }
 

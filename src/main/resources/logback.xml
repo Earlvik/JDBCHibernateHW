@@ -14,7 +14,7 @@
         </encoder>
     </appender>
 
-    <logger name="ru.hhschool.earlvik.JDBCHibernateHW" level="INFO">
+    <logger name="ru.hhschool.earlvik.JDBCHibernateHW" level="WARN">
         <appender-ref ref="console"/>
     </logger>
 

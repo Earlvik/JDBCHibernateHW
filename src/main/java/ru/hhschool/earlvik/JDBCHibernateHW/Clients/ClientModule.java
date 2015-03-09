@@ -19,7 +19,6 @@ public class ClientModule extends AbstractModule {
         bind(ClientDAO.class).to(ClientHibernateDAO.class).in(Singleton.class);
     }
 
-    @Named("Client")
     @Provides
     @Singleton
     Settings provideSettings() {
@@ -28,7 +27,6 @@ public class ClientModule extends AbstractModule {
 
     @Provides
     @Singleton
-    @Named("Client")
     DataSource provideDataSource(final Settings settings) throws SQLException {
         final MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setUrl(settings.database.url);
