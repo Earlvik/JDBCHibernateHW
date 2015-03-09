@@ -78,7 +78,7 @@ public class Client {
     }
 
     public ClientId getId() {
-        return new ClientId(id);
+        return (id == null)? null : new ClientId(id);
     }
 
     public Date getCreationDate() {

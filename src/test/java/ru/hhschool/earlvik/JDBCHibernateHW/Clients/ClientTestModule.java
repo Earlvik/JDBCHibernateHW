@@ -18,12 +18,12 @@ public class ClientTestModule extends AbstractModule{
     @Singleton
     SessionFactory provideSessionFactory(){
         return HibernateConfig.prod()
-                /*.setProperty("hibernate.connection.driver_class", "org.h2.Driver")
+                .setProperty("hibernate.connection.driver_class", "org.h2.Driver")
                 .setProperty("hibernate.connection.url", "jdbc:h2:mem:test;INIT=CREATE SCHEMA IF NOT EXISTS homework")
                 .setProperty("hibernate.connection.username","sa")
                 .setProperty("hibernate.connection.password", "")
-                .setProperty("hibernate.show_sql","true")
-                .setProperty("hibernate.hbm2ddl.auto","create-drop")*/
+                .setProperty("hibernate.show_sql","false")
+                .setProperty("hibernate.hbm2ddl.auto","create-drop")
                 .buildSessionFactory();
 
     }

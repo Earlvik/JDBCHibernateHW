@@ -31,7 +31,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
 
 
     @Inject
-    public TaxiSpringJDBCDAO(@Named("Taxi") final DataSource dataSource) {
+    public TaxiSpringJDBCDAO(final DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
         this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)

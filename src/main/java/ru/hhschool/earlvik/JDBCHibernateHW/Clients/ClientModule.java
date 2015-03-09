@@ -19,21 +19,6 @@ public class ClientModule extends AbstractModule {
         bind(ClientDAO.class).to(ClientHibernateDAO.class).in(Singleton.class);
     }
 
-    @Provides
-    @Singleton
-    Settings provideSettings() {
-        return SettingsUtils.loadSettings();
-    }
-
-    @Provides
-    @Singleton
-    DataSource provideDataSource(final Settings settings) throws SQLException {
-        final MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setUrl(settings.database.url);
-        dataSource.setUser(settings.database.user);
-        dataSource.setPassword(settings.database.password);
-        return dataSource;
-    }
 
     @Provides
     @Singleton

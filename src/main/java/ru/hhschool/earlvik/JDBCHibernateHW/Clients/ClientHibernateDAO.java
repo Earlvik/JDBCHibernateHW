@@ -42,7 +42,10 @@ public class ClientHibernateDAO implements ClientDAO {
     @Override
     public Optional<Client> get(ClientId clientId) {
         final Client client = (Client) session().get(Client.class, clientId.getValue());
+        if(client != null)
         logger.info("Retrieved client: "+client.toString());
+        else
+        logger.info("No client found with id "+clientId.getValue());
         return Optional.ofNullable(client);
     }
 

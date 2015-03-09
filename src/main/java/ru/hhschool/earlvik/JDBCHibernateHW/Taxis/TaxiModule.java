@@ -22,14 +22,12 @@ public class TaxiModule extends AbstractModule {
 
     @Provides
     @Singleton
-    @Named("Taxi")
     Settings provideSettings() {
         return SettingsUtils.loadSettings();
     }
 
     @Provides
     @Singleton
-    @Named("Taxi")
     DataSource provideDataSource(final Settings settings) throws SQLException {
         final MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setUrl(settings.database.url);

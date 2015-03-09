@@ -2,7 +2,7 @@
 
     <appender name="file" class="ch.qos.logback.core.FileAppender">
         <file>jdbchibernate.log</file>
-        <append>true</append>
+        <append>false</append>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%mdc{}] - %msg%n</pattern>
         </encoder>
@@ -18,7 +18,7 @@
         <appender-ref ref="console"/>
     </logger>
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="file"/>
     </root>
 
