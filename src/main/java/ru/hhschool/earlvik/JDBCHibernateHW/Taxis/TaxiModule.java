@@ -3,6 +3,7 @@ package ru.hhschool.earlvik.JDBCHibernateHW.Taxis;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import ru.hhschool.earlvik.JDBCHibernateHW.Settings.Settings;
 import ru.hhschool.earlvik.JDBCHibernateHW.Settings.SettingsUtils;
@@ -12,11 +13,13 @@ import java.sql.SQLException;
 
 public class TaxiModule extends AbstractModule {
 
+    @Named("Taxi")
     @Override
     protected void configure() {
         bind(TaxiDAO.class).to(TaxiSpringJDBCDAO.class).in(Singleton.class);
     }
 
+    @Named("Taxi")
     @Provides
     @Singleton
     Settings provideSettings() {

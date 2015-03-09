@@ -3,6 +3,9 @@ package ru.hhschool.earlvik.JDBCHibernateHW.Taxis;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,10 +26,16 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
     protected final JdbcTemplate jdbcTemplate;
     protected final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     protected final SimpleJdbcInsert simpleJdbcInsert;
+    protected Logger logger = LoggerFactory.getLogger(TaxiDAO.class);
 
     @Inject
+    @Named("Taxi")
+    DataSource dataSource;
+
+
     public TaxiSpringJDBCDAO(final DataSource dataSource) {
 
+        this.dataSource = dataSource;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
         this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
@@ -37,6 +46,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
     @Override
     public void insert(Taxi taxi) {
         if (taxi.getId() != null) {
+            logger.warn("Could not insert " + taxi + " with already assigned id");
             throw new IllegalArgumentException("can not insert " + taxi + " with already assigned id");
         }
 
@@ -48,7 +58,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
 
 
         final int taxiId = simpleJdbcInsert.executeAndReturnKey(params).intValue();
-
+        logger.info("Successfully inserted taxi: "+taxi.toString());
         taxi.setId(new TaxiId(taxiId));
     }
 
@@ -62,21 +72,24 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
         try {
             taxi = namedParameterJdbcTemplate.queryForObject(query, params, rowToTaxi);
         } catch (EmptyResultDataAccessException e) {
+            logger.info("No taxi with id "+taxiId.getValue()+" was found");
             return Optional.empty();
         }
+        logger.info("Retrieved taxi: "+taxi.toString());
         return Optional.of(taxi);
     }
 
     @Override
     public Set<Taxi> getAll() {
         final String query = "SELECT taxi_id, driver_name, car, available, drives FROM taxis";
-
+        logger.info("retrieved all taxis");
         return ImmutableSet.copyOf(jdbcTemplate.query(query, rowToTaxi));
     }
 
     @Override
     public void update(Taxi taxi) {
         if (taxi.getId() == null) {
+            logger.warn("Could not update " + taxi + " without id");
             throw new IllegalArgumentException("can not update " + taxi + " without id");
         }
 
@@ -93,6 +106,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
         );
 
         namedParameterJdbcTemplate.update(query, params);
+        logger.info("Updated taxi with id "+taxi.getId().getValue());
     }
 
     @Override
@@ -102,6 +116,7 @@ public class TaxiSpringJDBCDAO implements TaxiDAO {
         final ImmutableMap<String, Object> params = ImmutableMap.of("taxi_id", taxiId.getValue());
 
         namedParameterJdbcTemplate.update(query, params);
+        logger.info("Deleted taxi with id "+taxiId.getValue());
     }
 
 

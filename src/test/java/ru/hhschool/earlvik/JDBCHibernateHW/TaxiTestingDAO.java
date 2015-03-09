@@ -1,12 +1,13 @@
 package ru.hhschool.earlvik.JDBCHibernateHW;
 
+import com.google.inject.Inject;
 import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiSpringJDBCDAO;
 
 import javax.sql.DataSource;
 
 public class TaxiTestingDAO extends TaxiSpringJDBCDAO {
 
-
+    @Inject
     public TaxiTestingDAO(DataSource dataSource) {
         super(dataSource);
         drop();
@@ -16,6 +17,7 @@ public class TaxiTestingDAO extends TaxiSpringJDBCDAO {
     private void drop() {
         final String query = "DROP TABLE IF EXISTS taxis";
         jdbcTemplate.execute(query);
+        logger.info("Dropped taxi table");
     }
 
     private void create() {
@@ -29,5 +31,6 @@ public class TaxiTestingDAO extends TaxiSpringJDBCDAO {
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
 
         jdbcTemplate.execute(query);
+        logger.info("Created taxi table");
     }
 }

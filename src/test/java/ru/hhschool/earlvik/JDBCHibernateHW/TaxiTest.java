@@ -19,21 +19,15 @@ import static ru.hhschool.earlvik.JDBCHibernateHW.Settings.SettingsUtils.loadSet
  *
  */
 
-public class TaxiTest {
+public class TaxiTest extends TestBase{
 
-    private MysqlDataSource mysqlDataSource;
-    private Settings settings;
     private TaxiService taxiService;
 
-    @BeforeClass
-    public void setUp() throws SQLException{
-        settings = loadSettings();
-        mysqlDataSource = mysqlDataSource(settings.database.url, settings.database.user, settings.database.password);
-    }
+
 
     @Before
     public void prepare() {
-        TaxiDAO taxiDAO = new TaxiTestingDAO(mysqlDataSource);
+        TaxiDAO taxiDAO = getInstance(TaxiDAO.class);
         taxiService = new TaxiService(taxiDAO);
     }
 

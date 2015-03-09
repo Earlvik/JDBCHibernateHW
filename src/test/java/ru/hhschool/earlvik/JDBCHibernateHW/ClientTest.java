@@ -1,5 +1,7 @@
 package ru.hhschool.earlvik.JDBCHibernateHW;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import org.hibernate.SessionFactory;
 import org.junit.Assert;
@@ -8,10 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.hhschool.earlvik.JDBCHibernateHW.Clients.*;
 import ru.hhschool.earlvik.JDBCHibernateHW.Settings.Settings;
-import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.Taxi;
-import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiDAO;
-import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiService;
-import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiSpringJDBCDAO;
+import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.*;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -20,34 +19,23 @@ import java.util.Set;
 import static ru.hhschool.earlvik.JDBCHibernateHW.Settings.DataSourceUtils.mysqlDataSource;
 import static ru.hhschool.earlvik.JDBCHibernateHW.Settings.SettingsUtils.loadSettings;
 
-public class ClientTest {
+public class ClientTest extends TestBase{
 
-    private TaxiService taxiService;
-    private ClientService clientService;
-    private SessionFactory sessionFactory;
-    private MysqlDataSource mysqlDataSource;
+    private static TaxiService taxiService;
+    private static ClientService clientService;
 
-    private static SessionFactory getSessionFactory() {
-        return HibernateConfig.prod().buildSessionFactory();
-    }
-
-    private static ClientService getClientService(SessionFactory sessionFactory) {
-        final ClientDAO clientDAO = new ClientHibernateDAO(sessionFactory);
-        return new ClientService(sessionFactory, clientDAO);
-    }
 
     @BeforeClass
-    public void setUp() throws SQLException{
-        sessionFactory = getSessionFactory();
-        final Settings settings = loadSettings();
-        mysqlDataSource = mysqlDataSource(settings.database.url, settings.database.user, settings.database.password);
+    public static void setUp() throws SQLException{
+        ClientDAO clientDAO = getInstance(ClientDAO.class);
+        SessionFactory sessionFactory = getInstance(SessionFactory.class);
+        clientService  = new ClientService(sessionFactory, clientDAO);
     }
 
     @Before
     public void prepare(){
-        TaxiDAO taxiDAO = new TaxiTestingDAO(mysqlDataSource);
+        TaxiDAO taxiDAO = getInstance(TaxiDAO.class);
         taxiService = new TaxiService(taxiDAO);
-        clientService = getClientService(sessionFactory);
     }
 
     @Test

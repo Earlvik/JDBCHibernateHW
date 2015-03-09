@@ -3,6 +3,7 @@ package ru.hhschool.earlvik.JDBCHibernateHW.Clients;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import org.hibernate.SessionFactory;
 import ru.hhschool.earlvik.JDBCHibernateHW.HibernateConfig;
@@ -18,6 +19,7 @@ public class ClientModule extends AbstractModule {
         bind(ClientDAO.class).to(ClientHibernateDAO.class).in(Singleton.class);
     }
 
+    @Named("Client")
     @Provides
     @Singleton
     Settings provideSettings() {
@@ -26,6 +28,7 @@ public class ClientModule extends AbstractModule {
 
     @Provides
     @Singleton
+    @Named("Client")
     DataSource provideDataSource(final Settings settings) throws SQLException {
         final MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setUrl(settings.database.url);

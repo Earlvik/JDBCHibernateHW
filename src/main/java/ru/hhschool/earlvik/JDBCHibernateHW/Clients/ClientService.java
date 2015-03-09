@@ -2,6 +2,8 @@ package ru.hhschool.earlvik.JDBCHibernateHW.Clients;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.Taxi;
 import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiDAO;
 import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiId;
@@ -15,6 +17,7 @@ import java.util.function.Supplier;
 public class ClientService {
     private final SessionFactory sessionFactory;
     private final ClientDAO clientDAO;
+    Logger logger = LoggerFactory.getLogger(ClientService.class);
 
     public ClientService(final SessionFactory sessionFactory, final ClientDAO clientDAO) {
         this.sessionFactory = sessionFactory;
@@ -45,19 +48,26 @@ public class ClientService {
     public void callTaxi(final TaxiService taxiService, final ClientId clientId, final TaxiId taxiId) {
         inTransaction(() -> {
             Optional<Taxi> taxiOptional = taxiService.get(taxiId);
-            if (!taxiOptional.isPresent())
-                throw new IllegalArgumentException("No taxi with id "+taxiId.getValue()+" was found");
+            if (!taxiOptional.isPresent()) {
+                logger.warn("No taxi with id " + taxiId.getValue() + " was found");
+                throw new IllegalArgumentException("No taxi with id " + taxiId.getValue() + " was found");
+            }
             Taxi taxi = taxiOptional.get();
-            if (!taxi.isAvailable())
-                throw new IllegalArgumentException("Taxi with id "+taxiId.getValue()+" was not available");
+            if (!taxi.isAvailable()) {
+                logger.warn("Taxi with id " + taxiId.getValue() + " was not available");
+                throw new IllegalArgumentException("Taxi with id " + taxiId.getValue() + " was not available");
+            }
             Optional<Client> clientOptional = clientDAO.get(clientId);
-            if (!clientOptional.isPresent())
-                throw new IllegalArgumentException("No client with id "+clientId.getValue()+"was found");
+            if (!clientOptional.isPresent()) {
+                logger.warn("No client with id " + clientId.getValue() + "was found");
+                throw new IllegalArgumentException("No client with id " + clientId.getValue() + "was found");
+            }
             taxi.setDrives(taxi.getDrives() + 1);
             Client client = clientOptional.get();
             taxi.setAvailable(false);
             taxiService.update(taxi);
             client.setCarId(taxiId.getValue());
+            logger.info("Taxi "+taxiId.getValue()+" was successfully assigned to client "+clientId.getValue());
         });
     }
 

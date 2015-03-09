@@ -1,12 +1,12 @@
 package ru.hhschool.earlvik.JDBCHibernateHW;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import org.hibernate.SessionFactory;
 import ru.hhschool.earlvik.JDBCHibernateHW.Clients.*;
 import ru.hhschool.earlvik.JDBCHibernateHW.Settings.Settings;
-import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.Taxi;
-import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiService;
-import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.TaxiSpringJDBCDAO;
+import ru.hhschool.earlvik.JDBCHibernateHW.Taxis.*;
 
 import java.sql.SQLException;
 
@@ -19,14 +19,15 @@ import static ru.hhschool.earlvik.JDBCHibernateHW.Settings.SettingsUtils.loadSet
 public class ClientPlay {
 
     public static void main(String[] args) throws SQLException {
-        final SessionFactory sessionFactory = getSessionFactory();
-        final Settings settings = loadSettings();
-        final MysqlDataSource mysqlDataSource = mysqlDataSource(settings.database.url, settings.database.user, settings.database.password);
-        final TaxiService taxiService = new TaxiService(new TaxiSpringJDBCDAO(mysqlDataSource));
+        Injector injector = Guice.createInjector(new TaxiModule(), new ClientModule());
+        TaxiDAO taxiDAO = injector.getInstance(TaxiDAO.class);
+        ClientDAO clientDAO = injector.getInstance(ClientDAO.class);
+        final TaxiService taxiService = new TaxiService(taxiDAO);
+        SessionFactory sessionFactory = injector.getInstance(SessionFactory.class);
 
         try {
 
-            final ClientService clientService = getClientService(sessionFactory);
+            final ClientService clientService = new ClientService(sessionFactory, clientDAO);
 
             final Client client = new Client("Head", "Hunterz");
             System.out.println("persisting " + client);
@@ -68,14 +69,7 @@ public class ClientPlay {
         }
     }
 
-    private static ClientService getClientService(SessionFactory sessionFactory) {
-        final ClientDAO clientDAO = new ClientHibernateDAO(sessionFactory);
-        return new ClientService(sessionFactory, clientDAO);
-    }
 
-    private static SessionFactory getSessionFactory() {
-        return HibernateConfig.prod().buildSessionFactory();
-    }
 
 
 }
